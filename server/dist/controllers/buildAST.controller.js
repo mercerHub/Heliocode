@@ -36,6 +36,15 @@ exports.buildAST = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, v
         });
     }
     const parseResult = (0, parser_1.parseRule)(ruleString);
+    const existingInstance = yield astSchema_1.default.findOne({ $or: [{ name }, { ast: parseResult }] });
+    if (existingInstance) {
+        res
+            .status(400)
+            .json({
+            success: false,
+            message: `Rule with same name or AST already exists, name: ${name}`,
+        });
+    }
     const instanceInDb = yield astSchema_1.default.create({ ast: parseResult, name });
     if (!instanceInDb) {
         res

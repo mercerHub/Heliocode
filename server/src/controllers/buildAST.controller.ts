@@ -25,6 +25,16 @@ export const buildAST = asyncHandler(async (req: Request, res: Response) => {
     }
     const parseResult = parseRule(ruleString);
 
+    const existingInstance = await astSchema.findOne({ $or: [{ name }, { ast: parseResult }] });
+    if(existingInstance) {
+        res
+        .status(400)
+        .json({
+            success: false,
+            message: `Rule with same name or AST already exists, name: ${name}`,
+        });
+    }
+
     const instanceInDb = await astSchema.create({ast:parseResult,name});
 
     if(!instanceInDb) {
