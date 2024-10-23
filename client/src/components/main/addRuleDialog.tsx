@@ -28,7 +28,6 @@ function AddRuleDialog({setRules}:{setRules:React.Dispatch<React.SetStateAction<
             const response = await axiosInstance.post('/create_rule',data)
             .then((response) => {
                 setRules(prev => ([...prev, response.data.instanceInDb]));
-                localStorage.setItem('myapp-asts', JSON.stringify(prev => ([...prev, response.data.instanceInDb])));
                 return response.data;
             })
             .catch((error) => error.response.data);
