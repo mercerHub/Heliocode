@@ -17,24 +17,91 @@ const combineRules_1 = require("../helpers/combineRules");
 const astSchema_1 = __importDefault(require("../schemas/astSchema"));
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 exports.combineRulesController = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { rules } = req.body;
-    if (!rules || !Array.isArray(rules)) {
+    const { rules, names, mode, ruleName } = req.body;
+    try {
+        if (mode === 'combineASTs') {
+            if (!names || !Array.isArray(names)) {
+                res
+                    .status(400)
+                    .json({
+                    success: false,
+                    message: 'Names are required and should be an array',
+                });
+                return;
+            }
+            const combinedAST = yield (0, combineRules_1.combineASTs)(names);
+            const combinedRulesInstanceInDb = yield astSchema_1.default.create({ ast: combinedAST, name: ruleName });
+            res
+                .status(200)
+                .json({
+                combinedRulesInstanceInDb,
+                combinedAST,
+                success: true,
+                message: 'ASTs combined successfully',
+            });
+            return;
+        }
+        else if (mode === 'combineASTAndRule') {
+            if (!names || !Array.isArray(names)) {
+                res
+                    .status(400)
+                    .json({
+                    success: false,
+                    message: 'Names are required and should be an array',
+                });
+                return;
+            }
+            if (!rules || !rules.length) {
+                res
+                    .status(400)
+                    .json({
+                    success: false,
+                    message: 'Rules are required and should be an array',
+                });
+                return;
+            }
+            const combinedASTAndRule = yield (0, combineRules_1.combineASTAndRule)(names, rules[0]);
+            const combinedRulesInstanceInDb = yield astSchema_1.default.create({ ast: combinedASTAndRule, name: ruleName });
+            res
+                .status(200)
+                .json({
+                combinedRulesInstanceInDb,
+                combinedASTAndRule,
+                success: true,
+                message: 'ASTs and Rule combined successfully',
+            });
+            return;
+        }
+        else if (mode === 'combineRules') {
+            if (!rules || !Array.isArray(rules)) {
+                res
+                    .status(400)
+                    .json({
+                    success: false,
+                    message: 'Rules are required and should be an array',
+                });
+                return;
+            }
+            const combinedRules = (0, combineRules_1.combineRules)(rules);
+            const combinedRulesInstanceInDb = yield astSchema_1.default.create({ ast: combinedRules, name: ruleName });
+            res
+                .status(200)
+                .json({
+                combinedRulesInstanceInDb,
+                combinedRules,
+                success: true,
+                message: 'Rules combined successfully',
+            });
+            return;
+        }
+    }
+    catch (error) {
+        console.error(error);
         res
-            .status(400)
+            .status(500)
             .json({
             success: false,
-            message: 'Rules are required and should be an array',
+            message: 'Something went wrong while combining rules',
         });
-        return;
     }
-    const combinedRules = (0, combineRules_1.combineRules)(rules);
-    const combinedRulesInstanceInDb = yield astSchema_1.default.create({ ast: combinedRules });
-    res
-        .status(200)
-        .json({
-        combinedRules,
-        combinedRulesInstanceInDb,
-        success: true,
-        message: 'Rules combined successfully',
-    });
 }));

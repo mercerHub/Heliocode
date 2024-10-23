@@ -1,14 +1,20 @@
-import Navbar from "./components/header/navbar"
-import RulesComponent from "./components/main/rulesComponent"
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import MainComponent from './pages/MainComponent';
+import MergeAsts from './pages/MergeAsts';
 
 function App() {
   return (
     <>
-      <div className="h-screen w-screen bg-gray-100">
-        <Navbar />
-        <RulesComponent />
-      </div>
-
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path='' element={<MainComponent/>} />
+            <Route path='/merge-asts' element={<MergeAsts/>} />
+          </Route>
+        </Routes>
+      </Router>
     </>
   )
 }

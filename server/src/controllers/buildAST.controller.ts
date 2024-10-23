@@ -5,7 +5,7 @@ import astSchema from "../schemas/astSchema";
 
 export const buildAST = asyncHandler(async (req: Request, res: Response) => {
 
-    const { ruleString,name } = req.body;
+    const { ruleString , name} = req.body;
     if(!ruleString) {
         res
         .status(400)

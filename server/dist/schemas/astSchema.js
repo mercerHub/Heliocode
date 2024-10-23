@@ -14,6 +14,7 @@ const astSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         unique: true,
+        index: true,
     }
 }, { timestamps: true });
 exports.default = mongoose_1.default.model('AST', astSchema);

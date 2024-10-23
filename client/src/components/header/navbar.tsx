@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 
 interface NavbarItemsInterface {
     name: string;
@@ -11,8 +11,8 @@ const NavbarItems: NavbarItemsInterface[] = [
         url: '/'
     },
     {
-        name: 'About',
-        url: '/about'
+        name: 'Merge ASTs',
+        url: '/merge-asts'
     },
     {
         name: 'Contact',
@@ -21,42 +21,28 @@ const NavbarItems: NavbarItemsInterface[] = [
 ];
 
 function Navbar() {
-    const [activeUrl, setActiveUrl] = useState<string>(window.location.pathname);
-
-    useEffect(() => {
-        // Update active link on page load or navigation change
-        const handleLocationChange = () => setActiveUrl(window.location.pathname);
-
-        window.addEventListener('popstate', handleLocationChange);  // Handles browser back/forward navigation
-        return () => {
-            window.removeEventListener('popstate', handleLocationChange);
-        };
-    }, []);
-
-    const handleLinkClick = (url: string) => {
-        setActiveUrl(url);
-    };
-
     return (
-        <>
-            <header className='flex bg-black min-h-[10vh] text-gray-400 items-center p-5 sticky top-0 justify-center'>
-                <nav className='flex'>
-                    <ul className='flex gap-4'>
-                        {NavbarItems.map((item, index) => (
-                            <li
-                                key={index}
-                                className={`font-semibold py-2 px-4 rounded-xl transition-all duration-300 cursor-pointer ease-in-out ${
-                                    activeUrl === item.url ? 'text-white' : 'hover:text-white'
-                                }`}
-                                onClick={() => handleLinkClick(item.url)}
-                            >
-                                <a className='text-lg' href={item.url}>{item.name}</a>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            </header>
-        </>
+        <header className="flex backdrop-blur-lg bg-white/30 items-center p-2 sticky top-0 justify-center w-full">
+            <nav className="flex">
+                <ul className="flex gap-4">
+                    {NavbarItems.map((item, index) => (
+                        <NavLink
+                            to={item.url}
+                            key={index}
+                            className={({ isActive }) => 
+                                `font-semibold py-1 px-2 transition-all duration-300 cursor-pointer ease-in-out ${
+                                    isActive 
+                                        ? 'text-gray-800 border-b-2 border-b-sky-200' 
+                                        : 'hover:text-gray-700'
+                                }`
+                            }
+                        >
+                            {item.name}
+                        </NavLink>
+                    ))}
+                </ul>
+            </nav>
+        </header>
     );
 }
 
