@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const buildAST_controller_1 = require("../controllers/buildAST.controller");
+const combineRules_controller_1 = require("../controllers/combineRules.controller");
+const evaluateRule_controller_1 = require("../controllers/evaluateRule.controller");
+const getRules_controller_1 = require("../controllers/getRules.controller");
+const router = (0, express_1.Router)();
+router.route("/create_rule").post(buildAST_controller_1.buildAST);
+router.route("/combine_rules").post(combineRules_controller_1.combineRulesController);
+router.route("/evaluate_rule").post(evaluateRule_controller_1.evaluateRule);
+router.route("/get_rules").get(getRules_controller_1.getRulesController);
+exports.default = router;
