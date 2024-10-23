@@ -34,6 +34,9 @@ function RulesComponent() {
     useEffect(() => {
         fetchRules();
     }, [])
+    useEffect(() => {
+        localStorage.removeItem('myapp-asts');
+    }, [rules.length,rules])
 
 
     console.log(rules);
@@ -60,7 +63,7 @@ function RulesComponent() {
                         <Card className="w-[300px] pb-8 pt-6 bg-gray-950 text-gray-200 shadow-md shadow-gray-600 flex flex-col justify-between items-center">
                             <CardHeader className="text-2xl text-center font-semibold w-full h-full">Add Rule</CardHeader>
                             <CardContent className="items-center flex w-full justify-center h-full">
-                                <AddRuleDialog/>
+                                <AddRuleDialog setRules={setRules}/>
                             </CardContent>
                         </Card>
                     </div>

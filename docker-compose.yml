@@ -15,7 +15,7 @@ services:
     ports:
       - "3000:3000" # Backend running on port 3000
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/mydatabase # Replace 'mydatabase' with your DB name
+      - MONGO_URI=mongodb://mongodb:27017/zeotap-assignment # Replace 'mydatabase' with your DB name
     depends_on:
       - mongodb
 

@@ -22,7 +22,7 @@ const NavbarItems: NavbarItemsInterface[] = [
 
 function Navbar() {
     return (
-        <header className="flex backdrop-blur-lg bg-white/30 items-center p-2 sticky top-0 justify-center w-full">
+        <header className="flex backdrop-blur-lg bg-white/30 items-center p-2 sticky top-0 justify-center w-full z-99">
             <nav className="flex">
                 <ul className="flex gap-4">
                     {NavbarItems.map((item, index) => (

@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../utils/axiosInstance";
 import { useEffect, useState } from "react";
+import { rulesInterface } from "./rulesComponent";
 
 type FormData = {
     ruleString: string;
@@ -13,9 +14,7 @@ type FormData = {
 }
 
 
-
-
-function AddRuleDialog() {
+function AddRuleDialog({setRules}:{setRules:React.Dispatch<React.SetStateAction<rulesInterface[]>>}) {
     const { handleSubmit, register, formState: { errors } } = useForm<FormData>();
     const [success, setSuccess] = useState<boolean|null>(null);
 
@@ -27,7 +26,11 @@ function AddRuleDialog() {
 
         try {
             const response = await axiosInstance.post('/create_rule',data)
-            .then((response) => response.data)
+            .then((response) => {
+                setRules(prev => ([...prev, response.data.instanceInDb]));
+                localStorage.setItem('myapp-asts', JSON.stringify(prev => ([...prev, response.data.instanceInDb])));
+                return response.data;
+            })
             .catch((error) => error.response.data);
             window.alert(response.message);
             setSuccess(response.success);
