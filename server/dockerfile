@@ -1,0 +1,30 @@
+# Stage 1: Build Stage
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copy only package.json and package-lock.json for caching
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm install --production
+
+# Copy the rest of the application code
+COPY . .
+
+# If you are using TypeScript, you may need to build the project
+# RUN npm run build
+
+# Stage 2: Production Stage
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy only the necessary files from the builder stage
+COPY --from=builder /app /app
+
+# Expose the backend port
+EXPOSE 3000
+
+# Run the Node.js app
+CMD ["npm", "start"]

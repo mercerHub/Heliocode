@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80" # Frontend running on port 3001
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Backend running on port 3000
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/mydatabase # Replace 'mydatabase' with your DB name
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017" # MongoDB running on port 27017
+    volumes:
+      - mongodb_data:/data/db # Persist MongoDB data
+
+volumes:
+  mongodb_data:
